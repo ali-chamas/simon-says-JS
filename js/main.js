@@ -10,12 +10,12 @@ let currentScore=0;
 let order = [];
 let userOrder=[]
 
+//recursive function
  function activateTile(level){ 
     
     tiles[0].parentElement.classList.add('unclickable')
     if(level===0){
         //user turn
-        
         tiles[0].parentElement.classList.remove('unclickable')
         checkOrder()
     }else{
@@ -35,7 +35,6 @@ let userOrder=[]
 
 function deactivateTile(activeTile){
     activeTile.classList.add('inactive')
-    
 }
 
 
@@ -60,13 +59,11 @@ function startGame(){
         new Audio('../sounds/game-win.wav').play()
         alert('you won!')
         reset()
-        
-       
     }else{
-    order=[]
-    userOrder=[]
-    goodChoice=false
-    activateTile(level.innerHTML);
+        order=[]
+        userOrder=[]
+        goodChoice=false
+        activateTile(level.innerHTML);
     }
 }
 
@@ -88,7 +85,7 @@ for (let i = 0; i < tiles.length; i++) {
         playAudio(tile.target); 
 
         setTimeout(function () {
-            checkOrder(); 
+        checkOrder(); 
         }, 500);
     });
     
@@ -97,28 +94,28 @@ for (let i = 0; i < tiles.length; i++) {
 function checkOrder() {
     
     for (let j = 0; j < userOrder.length; j++) {
+
         if (order[j] === userOrder[j]) {
 
             goodChoice = true;
             
         } else {
-           
-            
             new Audio('../sounds/wrong.mp3').play();
             endGame();
         }
+
     }
 
    
-
-    if (userOrder.length === order.length && goodChoice ) {
-    currentScore++;
-    if(currentScore>=maxScore){
-        maxScore=currentScore;
-        score.innerHTML=maxScore;
-    }
-    level.innerHTML = parseInt(level.innerHTML) + 1;
-    startGame();
+//if user selected the tiles in the right order, repeat by increasing level
+    if (userOrder.length === order.length && goodChoice) {
+         currentScore++;
+        if(currentScore>=maxScore){
+            maxScore=currentScore;
+            score.innerHTML=maxScore;
+        }
+        level.innerHTML = parseInt(level.innerHTML) + 1;
+        startGame();
     }
     
 }
