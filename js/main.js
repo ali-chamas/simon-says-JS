@@ -4,14 +4,18 @@ const level = document.getElementById('level');
 const tiles = document.querySelectorAll('.tile')
 
 
+let maxScore=0;
+let currentScore=0;
 
-let turn = 'computer';
 let order = [];
-
+let userOrder=[]
 
  function activateTile(level){ 
+    
+    tiles[0].parentElement.classList.add('unclickable')
     if(level===0){
         //user turn
+        
         tiles[0].parentElement.classList.remove('unclickable')
         checkOrder()
     }else{
@@ -24,7 +28,7 @@ let order = [];
         deactivateTile(activeTile)
         activateTile(level-1)
         
-    },3000)
+    },2000)
     
     }
 }
@@ -49,10 +53,21 @@ function playAudio(activeTile){
     }
 }
 
+
+
 function startGame(){
-    
-    activateTile(level.innerHTML)
-   
+    if(level.innerHTML>12){
+        new Audio('../sounds/game-win.wav').play()
+        alert('you won!')
+        reset()
+        
+       
+    }else{
+    order=[]
+    userOrder=[]
+    goodChoice=false
+    activateTile(level.innerHTML);
+    }
 }
 
 startButton.addEventListener('click',function(){
@@ -60,7 +75,71 @@ startButton.addEventListener('click',function(){
     startGame()
 })
 
-let gameOver=false;
-let gameWon=false;
+
+
+
+
+
+let goodChoice = false;
+
+for (let i = 0; i < tiles.length; i++) {
+    tiles[i].addEventListener('click', function (tile) {
+        userOrder.push(tile.target.getAttribute('data-tile'));
+        playAudio(tile.target); 
+
+        setTimeout(function () {
+            checkOrder(); 
+        }, 500);
+    });
+    
+}
+
+function checkOrder() {
+    
+    for (let j = 0; j < userOrder.length; j++) {
+        if (order[j] === userOrder[j]) {
+
+            goodChoice = true;
+            
+        } else {
+           
+            
+            new Audio('../sounds/wrong.mp3').play();
+            endGame();
+        }
+    }
+
+   
+
+    if (userOrder.length === order.length && goodChoice ) {
+    currentScore++;
+    if(currentScore>=maxScore){
+        maxScore=currentScore;
+        score.innerHTML=maxScore;
+    }
+    level.innerHTML = parseInt(level.innerHTML) + 1;
+    startGame();
+    }
+    
+}
+
+function reset(){
+    level.innerHTML=0;
+    tiles[0].parentElement.classList.add('unclickable')
+    order=[];
+    userOrder=[]
+    currentScore=0
+    goodChoice=false;
+}
+    
+
+
+function endGame(){
+    reset()
+    new Audio('../sounds/game-over.wav').play()
+    
+}
+
+
 
 
