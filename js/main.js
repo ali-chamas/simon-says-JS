@@ -6,7 +6,10 @@ const tiles = document.querySelectorAll('.tile')
 
 let maxScore=0;
 let currentScore=0;
-
+if(window.localStorage.getItem('maxScore')){
+    maxScore=parseInt(window.localStorage.getItem('maxScore'))
+    score.innerHTML=maxScore
+}
 let order = [];
 let userOrder=[]
 
@@ -112,6 +115,7 @@ function checkOrder() {
          currentScore++;
         if(currentScore>=maxScore){
             maxScore=currentScore;
+            window.localStorage.setItem('maxScore',String(maxScore))
             score.innerHTML=maxScore;
         }
         level.innerHTML = parseInt(level.innerHTML) + 1;
